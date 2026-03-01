@@ -5,6 +5,7 @@ on:
   push:
     branches: 
       - main
+      - tyk-sre-task-4
     paths:
       - 'python/**'
 
@@ -35,5 +36,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/tyk-sre-tool-python-0xumang:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/tyk-sre-tool-python-0xumang:${{github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
 
