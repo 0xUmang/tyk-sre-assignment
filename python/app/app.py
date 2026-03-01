@@ -11,7 +11,8 @@ class AppHandler(BaseHTTPRequestHandler):
             self.healthz()
         elif self.path == '/status/deployments':
             self.status_deployments()
-        
+        elif self.path == '/status/k8s-api':
+            self.status_k8s_api()
         else:
             self.send_error(404)
 
@@ -43,6 +44,25 @@ class AppHandler(BaseHTTPRequestHandler):
             self.respond(200, json.dumps(response_data))
         except Exception as e:
             self.respond(500, "Error connecting to Kubernetes API: {}".format(str(e)))
+
+    def status_k8s_api(self):
+        """Check if we can successfully communicate with the Kubernetes API server"""
+        try:
+            k8s_api_client = client.ApiClient()
+            version = client.VersionApi(k8s_api_client).get_code()
+            
+            response_data = {
+                "status": "connected",
+                "kubernetes_version": version.git_version
+            }
+            self.respond(200, json.dumps(response_data))
+        except Exception as e:
+            response_data = {
+                "status": "disconnected",
+                "error": str(e)
+            }
+            self.respond(503, json.dumps(response_data))
+
 
     def healthz(self):
         """Responds with the health status of the application"""
