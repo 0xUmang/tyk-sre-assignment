@@ -25,6 +25,8 @@ go test -v
 
 Location: https://github.com/TykTechnologies/tyk-sre-assignment/tree/main/python
 
+Setup and run guide: [python/SETUP.md](python/SETUP.md)
+
 We suggest using a Python virtual env, e.g.:
 ```
 python3 -m venv .venv
