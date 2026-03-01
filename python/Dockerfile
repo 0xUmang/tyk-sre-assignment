@@ -10,6 +10,6 @@ COPY . .
 
 EXPOSE 8080
 
-ENTRYPOINT ["python", "main.py" ]
+ENTRYPOINT ["python", "main.py"]
 
 CMD ["--address", "0.0.0.0:8080"]
