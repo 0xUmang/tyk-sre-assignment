@@ -1,5 +1,5 @@
 import socketserver
-
+import json
 from kubernetes import client
 from http.server import BaseHTTPRequestHandler
 
@@ -9,8 +9,40 @@ class AppHandler(BaseHTTPRequestHandler):
         """Catch all incoming GET requests"""
         if self.path == "/healthz":
             self.healthz()
+        elif self.path == '/status/deployments':
+            self.status_deployments()
+        
         else:
             self.send_error(404)
+
+    def status_deployments(self):
+        """Check if all deployments have their desired number of healthy pods"""
+        try:
+            apps_v1_api = client.AppsV1Api()
+            deployments = apps_v1_api.list_deployment_for_all_namespaces(watch=False)
+
+            total_deployments = len(deployments.items)
+            unhealthy_deployments = []
+            for deployment in deployments.items:
+                desired_replicas = deployment.spec.replicas or 1
+                ready_replicas = deployment.status.ready_replicas or 0
+                
+                if ready_replicas < desired_replicas:
+                    unhealthy_deployments.append({
+                        "namespace": deployment.metadata.namespace,
+                        "name": deployment.metadata.name,
+                        "desired": desired_replicas,
+                        "ready": ready_replicas
+                    })
+            
+            response_data = {
+                "total_deployments": total_deployments,
+                "total_unhealthy_deployments": len(unhealthy_deployments),
+                "unhealthy_deployments": unhealthy_deployments
+            }
+            self.respond(200, json.dumps(response_data))
+        except Exception as e:
+            self.respond(500, "Error connecting to Kubernetes API: {}".format(str(e)))
 
     def healthz(self):
         """Responds with the health status of the application"""
