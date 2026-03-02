@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-go-tyk-sre-tool-image-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Checkout code
@@ -45,7 +45,6 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/tyk-sre-tool-golang-0xumang:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/tyk-sre-tool-golang-0xumang:${{ github.sha }}
-          platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
