@@ -170,7 +170,7 @@ Cleanup test resources:
 kubectl delete namespace team-a team-b
 ```
 
-## Optional needed cleanup for Helm scenario
+## Optional  needed cleanup for Helm scenario
 
 ```bash
 helm uninstall tyk-sre-golang -n tyk-sre
