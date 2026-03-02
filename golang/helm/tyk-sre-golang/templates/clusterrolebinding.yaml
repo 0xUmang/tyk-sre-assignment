@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tyk-sre-golang
+  labels:
+    app: tyk-sre-golang
+subjects:
+  - kind: ServiceAccount
+    name: tyk-sre-golang
+    namespace: tyk-sre
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tyk-sre-golang

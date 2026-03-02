@@ -1,0 +1,6 @@
+replicaCount: 4
+
+image: 0xumang/tyk-sre-tool-golang-0xumang:latest
+
+service:
+  port: 8080
